@@ -1,0 +1,33 @@
+#include <iostream>
+#include <vector>
+#include <queue>  // For priority_queue (min-heap)
+using namespace std;
+
+int findKthLargest(vector<int>& nums, int k) {
+    // Min-heap to store the k largest elements
+    priority_queue<int, vector<int>, greater<int>> minHeap;
+
+    // Iterate through the elements of the array
+    for (int num : nums) {
+        // If the heap has fewer than k elements, add the current element
+        if (minHeap.size() < k) {
+            minHeap.push(num);
+        } else if (num > minHeap.top()) {
+            // If the heap has k elements and the current element is larger
+            minHeap.pop();  // Remove the smallest element
+            minHeap.push(num);  // Add the current element
+        }
+    }
+
+    // The root of the heap (top element) is the kth largest element
+    return minHeap.top();
+}
+
+int main() {
+    vector<int> nums = {3, 2, 1, 5, 6, 4};
+    int k = 2;
+
+    cout << "The " << k << "th largest element is: " << findKthLargest(nums, k) << endl;
+    
+    return 0;
+}
