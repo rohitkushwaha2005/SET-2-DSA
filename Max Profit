@@ -1,0 +1,35 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int maxProfit(const vector<int>& prices) {
+    int n = prices.size();
+    if (n <= 1) {
+        return 0;  // No transaction possible if there's only one day or no days
+    }
+
+    int min_price = prices[0];  // Initialize min_price to the price on the first day
+    int max_profit = 0;  // Initialize max_profit to 0 as no profit is made yet
+
+    // Iterate through the price array
+    for (int i = 1; i < n; ++i) {
+        // Update min_price if a lower price is found
+        min_price = min(min_price, prices[i]);
+        
+        // Calculate the potential profit
+        int profit = prices[i] - min_price;
+        
+        // Update max_profit if the current profit is greater than the previous max_profit
+        max_profit = max(max_profit, profit);
+    }
+
+    return max_profit;  // Return the maximum profit found
+}
+
+int main() {
+    vector<int> prices = {7, 1, 5, 3, 6, 4};
+    
+    cout << "Maximum profit: " << maxProfit(prices) << endl;
+
+    return 0;
+}
