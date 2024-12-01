@@ -1,0 +1,49 @@
+#include <iostream>
+#include <vector>
+#include <climits>
+using namespace std;
+
+string findMaxSumSubarray(const vector<int>& arr, int k) {
+    int n = arr.size();
+    
+    if (k > n) {
+        return "Invalid";  // No subarray of size k can exist
+    }
+    
+    // Calculate the sum of the first 'k' elements
+    int window_sum = 0;
+    for (int i = 0; i < k; ++i) {
+        window_sum += arr[i];
+    }
+    
+    // Initialize the maximum sum as the sum of the first window
+    int max_sum = window_sum;
+    
+    // Slide the window and calculate the sum for subsequent windows
+    for (int i = k; i < n; ++i) {
+        // Slide the window: subtract the element going out of the window and add the new element
+        window_sum += arr[i] - arr[i - k];
+        
+        // Update max_sum if we found a larger sum
+        max_sum = max(max_sum, window_sum);
+    }
+    
+    return to_string(max_sum);
+}
+
+int main() {
+    vector<int> arr1 = {100, 200, 300, 400};
+    int k1 = 2;
+    
+    vector<int> arr2 = {1, 4, 2, 10, 23, 3, 1, 0, 20};
+    int k2 = 4;
+    
+    vector<int> arr3 = {2, 3};
+    int k3 = 3;
+
+    cout << "Maximum sum of " << k1 << " consecutive elements: " << findMaxSumSubarray(arr1, k1) << endl;
+    cout << "Maximum sum of " << k2 << " consecutive elements: " << findMaxSumSubarray(arr2, k2) << endl;
+    cout << "Maximum sum of " << k3 << " consecutive elements: " << findMaxSumSubarray(arr3, k3) << endl;
+
+    return 0;
+}
