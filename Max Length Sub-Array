@@ -1,0 +1,64 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+using namespace std;
+
+vector<int> longestSubarrayWithSum(const vector<int>& nums, int target) {
+    unordered_map<int, int> prefixSumMap;  // Maps cumulative sum to its index
+    int currentSum = 0;
+    int maxLength = 0;
+    int startIndex = -1;
+    
+    // Traverse through the array
+    for (int i = 0; i < nums.size(); ++i) {
+        currentSum += nums[i];
+        
+        // Check if the current sum itself is equal to the target
+        if (currentSum == target) {
+            maxLength = i + 1;
+            startIndex = 0;
+        }
+        
+        // Check if (currentSum - target) has been seen before
+        if (prefixSumMap.find(currentSum - target) != prefixSumMap.end()) {
+            // If found, check if this subarray is the longest so far
+            if (i - prefixSumMap[currentSum - target] > maxLength) {
+                maxLength = i - prefixSumMap[currentSum - target];
+                startIndex = prefixSumMap[currentSum - target] + 1;
+            }
+        }
+        
+        // Store the first occurrence of current sum
+        if (prefixSumMap.find(currentSum) == prefixSumMap.end()) {
+            prefixSumMap[currentSum] = i;
+        }
+    }
+    
+    // If no subarray found, return an empty array
+    if (maxLength == 0) {
+        return {};
+    }
+    
+    // Return the longest subarray with sum equal to the target
+    vector<int> result(nums.begin() + startIndex, nums.begin() + startIndex + maxLength);
+    return result;
+}
+
+int main() {
+    vector<int> nums = { 5, 6, -5, 5, 3, 5, 3, -2, 0 };
+    int target = 8;
+    
+    vector<int> result = longestSubarrayWithSum(nums, target);
+    
+    if (!result.empty()) {
+        cout << "Longest subarray with sum " << target << ": { ";
+        for (int num : result) {
+            cout << num << " ";
+        }
+        cout << "}" << endl;
+    } else {
+        cout << "No subarray with the given sum found." << endl;
+    }
+
+    return 0;
+}
